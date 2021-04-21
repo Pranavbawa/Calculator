@@ -5,13 +5,13 @@ def a():
     total = 0
     count = 0
     num = float(input('Enter the first number for addition: '))
-    if num != type(int) or num!= type(float):
-        print("Please enter a valid number")
+    while num != 0:
+        if num == 0:
+            break
+        else:
+            if num!= type(float):
+                print("Please enter a valid number: ")
 
-    else:
-        while num != 0:
-            if num == 0:
-                break
             else:
                 total += num
                 num = float(input('Enter the another number for addition or 0 to compute the current calculations: '))
