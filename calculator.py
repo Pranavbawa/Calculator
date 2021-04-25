@@ -9,7 +9,6 @@ def a():
             total += num
             num = float(input('Enter the another number for addition or 0 to compute the current calculations: '))
             count+=1
-
     return [f"Answer: {total}", f"total number of inputs given: {count}"]
 
 # Subtraction
