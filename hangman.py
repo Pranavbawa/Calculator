@@ -1,17 +1,22 @@
 import random
 categories = {
-    'Films': ['shawshank-redemption', 'inception', 'batman-begins', 'saving-private-ryan'],
-    'Soccer Teams': ['chelsea', 'real-madrid', 'barcelona', 'manchester-united', 'liverpool', 'arsenal', 'juventus'],
-    'Cities': ['moscow', 'san-francisco', 'new-york', 'london', 'dublin', 'rome', 'venice']
+    'Films': ['shawshank-redemption', 'inception', 'batman-begins', 'saving-private-ryan', 'andhadhun', 'shutter-island', 'get-out', 'girl-next-door', 'man-of-steel', 'justice-league', 'forrest-gump'],
+    'Soccer Teams': ['chelsea', 'real-madrid', 'barcelona', 'manchester-united', 'liverpool', 'arsenal', 'juventus', 'leicester-city', 'tottenham', 'ac-milan', 'wolves', 'atletico-madrid'],
+    'Cities': ['moscow', 'san-francisco', 'new-york', 'london', 'dublin', 'rome', 'venice', 'milan', 'new-delhi', 'amritsar', 'mumbai', 'seattle', 'new-jersey', 'philadelphia', 'los-angles']
 }
-alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'w', 'y', 'x', 'z']
+alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'y', 'x', 'z']
+user_selection_index = ['Films', 'Soccer Teams', 'Cities']
+user_index = int(input("Please select the following categories:-"
+                       "\n0 for Films"
+                       "\n1 for Soccer Teams"
+                       "\n2 for Cities"
+                       "\nEnter here: "))
+user_selection_category = categories[user_selection_index[user_index]]
 
-user_selection_category = categories[input("Please select from the category: Films, Soccer Teams, Cities\n")]
 guess_word = random.choice(user_selection_category)
-number_of_lives = 10
+number_of_lives = 5
 mask_word = ""
 game_playing = True
-print(guess_word)
 def mask_guess_word():
     global mask_word
     global user_guess
@@ -31,6 +36,8 @@ def play_game():
     global number_of_lives
     global mask_word
     global game_playing
+    global user_selection_index
+    print(f"Select category: {user_selection_index[user_index]}")
     print(mask_word)
     while game_playing == True:
         user_guess = input("Please enter your guess letter: ")
@@ -50,7 +57,7 @@ def play_game():
                 elif user_guess not in guess_word:
                     print("Wrong guess")
                     number_of_lives = number_of_lives - 1
-
+                    print(mask_word)
                     print(f"number_of_lives: {number_of_lives}")
                     if number_of_lives < 1:
                         game_playing = False
@@ -58,6 +65,6 @@ def play_game():
                         print(f"You lost! The word was: {guess_word}")
         else:
             print("Please enter a valid input")
-print(play_game())
+play_game()
 
 
