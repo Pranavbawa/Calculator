@@ -1,20 +1,102 @@
 import random
+import requests
+import string
+from tmdbv3api import TMDb
+from tmdbv3api import Movie
+from tmdbv3api import TV
+
+tmdb = TMDb()
+tmdb.api_key = '54d503fb88d27a31d51c15e0911a3968'
+
 categories = {
-    'Films': ['shawshank-redemption', 'inception', 'batman-begins', 'saving-private-ryan', 'andhadhun', 'shutter-island', 'get-out', 'girl-next-door', 'man-of-steel', 'justice-league', 'forrest-gump'],
+    'Films': [],
+    'TV': [],
     'Soccer Teams': ['chelsea', 'real-madrid', 'barcelona', 'manchester-united', 'liverpool', 'arsenal', 'juventus', 'leicester-city', 'tottenham', 'ac-milan', 'wolves', 'atletico-madrid'],
     'Cities': ['moscow', 'san-francisco', 'new-york', 'london', 'dublin', 'rome', 'venice', 'milan', 'new-delhi', 'amritsar', 'mumbai', 'seattle', 'new-jersey', 'philadelphia', 'los-angles']
 }
-alphabets = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'y', 'x', 'z']
-user_selection_index = ['Films', 'Soccer Teams', 'Cities']
+
+def title_cleaning(title):
+    title = title.replace(" ", "-")
+    title = title.replace("'", "")
+    title = title.replace("I", "i")
+    title = title.replace("II", "ii")
+    title = title.replace("III", "iii")
+    title = title.replace(".", "")
+    title = title.replace(":", "")
+    title = title.replace("?", "")
+    title = title.lower()
+    return title
+
+
+def fetch_movies():
+    global categories
+    movie = Movie()
+    popular = movie.popular()
+    top_rated = movie.top_rated()
+    now_playing_movies = movie.now_playing()
+    popular_title_list = []
+    top_rated_title_list = []
+    now_playing_movies_list = []
+
+    for p in popular:
+        popular_title = p.title
+        popular_title = title_cleaning(popular_title)
+        popular_title_list.append(popular_title)
+
+
+    for film in popular_title_list:
+        categories["Films"].append(film)
+
+    for t in top_rated:
+        top_rated_title = t.title
+        top_rated_title = title_cleaning(top_rated_title)
+        top_rated_title_list.append(top_rated_title)
+
+    for film in top_rated_title_list:
+        categories["Films"].append(film)
+
+    for r in now_playing_movies:
+        now_movie_title = r.title
+        now_movie_title = title_cleaning(now_movie_title)
+        now_playing_movies_list.append(now_movie_title)
+
+    for film in now_playing_movies_list:
+        categories["Films"].append(film)
+
+fetch_movies()
+
+
+def fetch_tv():
+    global categories
+    tv = TV()
+    popular_tv = tv.popular()
+    top_rated_tv = tv.top_rated()
+    popular_tv_list = []
+    top_rated_tv_list = []
+
+    for p in popular_tv:
+        pop_tv = p.name
+        pop_tv = title_cleaning(pop_tv)
+        popular_tv_list.append(pop_tv)
+
+    for tv in popular_tv_list:
+        categories['TV'].append(tv)
+
+fetch_tv()
+
+
+alphabets = string.ascii_letters
+user_selection_index = ['Films', 'TV', 'Soccer Teams', 'Cities']
 user_index = int(input("Please select the following categories:-"
                        "\n0 for Films"
-                       "\n1 for Soccer Teams"
-                       "\n2 for Cities"
+                       "\n1 for TV Shows"
+                       "\n2 for Soccer Teams"
+                       "\n3 for Cities"
                        "\nEnter here: "))
 user_selection_category = categories[user_selection_index[user_index]]
 
 guess_word = random.choice(user_selection_category)
-number_of_lives = 5
+number_of_lives = 6
 mask_word = ""
 game_playing = True
 def mask_guess_word():
@@ -37,7 +119,22 @@ def play_game():
     global mask_word
     global game_playing
     global user_selection_index
-    print(f"Select category: {user_selection_index[user_index]}")
+    difficulty = input("Please select the difficulty level:-"
+                       "\n 0 for beginner"
+                       "\n 1 for intermediate"
+                       "\n 2 for advanced"
+                       "\n Enter here: ")
+    if difficulty == "0":
+        print("You are such a baby!")
+        number_of_lives = 12
+    elif difficulty == "1":
+        print("You like to take on some challenge huh? Let's go!")
+        number_of_lives = 6
+    elif difficulty == "2":
+        print("You are a warrior")
+        number_of_lives = 3
+    print(f"Selected category: {user_selection_index[user_index]}")
+    print(f"Number of lives: {number_of_lives}")
     print(mask_word)
     while game_playing == True:
         user_guess = input("Please enter your guess letter: ")
@@ -65,6 +162,7 @@ def play_game():
                         print(f"You lost! The word was: {guess_word}")
         else:
             print("Please enter a valid input")
+
 play_game()
 
 
